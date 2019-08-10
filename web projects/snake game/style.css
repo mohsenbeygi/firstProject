@@ -1,0 +1,23 @@
+#grid {
+    border-collapse: collapse;
+    position: absolute;
+    left: 50%;
+    margin-left: -45vh;
+    top: 50%;
+    margin-top: -45vh;
+    border:  1vh solid gray;
+}
+
+#score {
+    position: absolute;
+    top: 50%;
+    font-size: 5vh;
+    margin-top: -5vh;
+}
+
+.cell {
+    background-color: black;
+    /* border:  1vh solid gray; */
+    height:  5vh;
+    width:  5vh;
+}

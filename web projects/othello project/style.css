@@ -1,0 +1,100 @@
+#gametable {
+    background-color: green;
+    border-collapse: collapse;
+    position: absolute;
+    left: 50%;
+    margin-left: -44vh;
+    top: 50%;
+    margin-top: -44vh;
+}
+
+.cell {
+    border:  1vh solid black;
+    height:  10vh;
+    width:  10vh;
+    text-align:  center;
+    cursor: pointer;
+}
+
+.restartbtn {
+    position: absolute;
+    top: 50%;
+    margin-top: -5vh;
+    margin-left: 1vh;
+    height: 10vh;
+    width: 15vw;
+    cursor: pointer;
+    font-size: 3vw;
+    text-align: center;
+    border-radius: 2vh;
+    border: 1vh solid black;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    background-color: white;
+}
+
+.restartbtn:hover {
+    background-color: gray;
+}
+
+.title {
+    position: absolute;
+    margin-left: 1vw;
+    margin-top: 1vh;
+    height: 5vh;
+    width: 10vw;
+    font-size: 4vw;
+}
+
+.result {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    left: 50%;
+    margin-left: -20vw;
+    top: 1vh;
+    font-size: 3vw;
+    text-align: center;
+    width: 40vw;
+}
+
+.score {
+    width: 10vh;
+    height: 80vh;
+    position: absolute;
+    margin-left: 90vw;
+    top: 10vh;
+    background-color: white;
+    color: black;
+    font-size: 4vh;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.blackcircle{
+  background-color: black;
+  display: block;
+  height: 9vh;
+  width: 9vh;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.whitecircle{
+  background-color: white;
+  display: block;
+  height: 9vh;
+  width: 9vh;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.redcircle{
+  background-color: rgba(255, 0 , 0, 0.2);
+  display: block;
+  height: 9vh;
+  width: 9vh;
+  border-radius: 50%;
+  margin: auto;
+}

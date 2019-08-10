@@ -1,0 +1,88 @@
+td {
+    border:  1vh solid #734902;
+    height:  25vh;
+    width:  25vh;
+    text-align:  center;
+    vertical-align: middle;
+    font-family:  "Comic Sans MS", cursive;
+    font-size: 18vh;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    position: absolute;
+    left: 50%;
+    margin-left: -22vw;
+    top: 60%;
+    margin-top: -25vw;
+}
+
+table tr:first-child td {
+    border-top: 0;
+}
+
+table tr:last-child td {
+    border-bottom: 0;
+}
+
+table tr td:first-child {
+    border-left: 0;
+}
+
+table tr td:last-child {
+    border-right: 0;
+}
+
+button {
+    position: absolute;
+    top: 65%;
+    margin-top: -10vw;
+    margin-left: 1vw;
+    cursor: pointer;
+    font-size: 4vw;
+    text-align: center;
+    border-radius: 1vw;
+    border: 7px solid #734902;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    background-color: white;
+
+}
+
+button:hover {
+    background-color: rgba(147, 94, 5, 0.60);
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.end {
+    display: none;
+    width: 50vw;
+    height: 10vh;
+    position: absolute;
+    left: 45%;
+    margin-left: -20vw;
+    top: 2%;
+    background-color: rgba(126, 255, 101, 0.6);
+    border-radius: 10vw;
+    font-size: 4em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#gamemodebtn {
+    top: 50%;
+}
+
+.score {
+    /* width: 50vw;
+    height: 10vh; */
+    display: block;
+    position: absolute;
+    right: 10%;
+    top: 39%;
+    font-size: 4em;
+    text-align: center;
+    background-color: white;
+    color: #734902;
+}
