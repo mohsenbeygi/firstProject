@@ -4,7 +4,7 @@
     position: absolute;
     left: 50%;
     margin-left: -44vh;
-    top: 50%;
+    top: 51%;
     margin-top: -44vh;
 }
 
@@ -53,7 +53,7 @@
     color: black;
     left: 50%;
     margin-left: -20vw;
-    top: 1vh;
+    top: 0vh;
     font-size: 3vw;
     text-align: center;
     width: 40vw;

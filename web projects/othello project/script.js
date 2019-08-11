@@ -6,11 +6,15 @@ const CORNERS = [[0, 0],
     [0, TABLE_LEN - 1],
     [TABLE_LEN - 1, TABLE_LEN - 1]
 ];
+const AiWaitTime = 400000;
 var origBoard;
+var computerTurn = false;
 
 cells = createTable("gametable");
 
 startGame(cells)
+
+setInterval(function () {checkAiResponse()}, 1000 / 5);
 
 function startGame(cells) {
     document.querySelector(".result").style.display = "none";
@@ -88,6 +92,49 @@ function getEmptyTable(cells) {
     }
     setStartPieces(cells);
 }
+function checkAiResponse() {
+    if (computerTurn) {
+        setTimeout(function() {}, AiWaitTime);
+        aiMovesPossible = getMoves(origBoard, AI);
+        let scores = showScores(origBoard);
+        if (! checkEnd(scores) && aiMovesPossible.length > 0) {
+            // ai move (ai turn is after humans turn)
+            // setTimeout(function(){}, 10000)
+            aiMove = getBestMove(origBoard);
+            makeMove(aiMove[0], aiMove[1], AI, origBoard);
+            console.log('\n\n--- Ai move start ---\n');
+            console.log('\nai move:\nx: ', aiMove[0], ' y: ', aiMove[1]);
+            scores = showScores(origBoard);
+            aiMovesPossible = getMoves(origBoard, AI)
+            c = getMoves(origBoard, HUMAN).length == 0;
+            if (c && aiMovesPossible.length > 0) {
+                scores = showScores(origBoard);
+                return
+            }
+            // while (c && aiMovesPossible.length > 0) {
+            //     aiMove = getBestMove(origBoard);
+            //     console.log('ai move:\nx: ', aiMove[0], ' y: ', aiMove[1]);
+            //     makeMove(aiMove[0], aiMove[1], AI, origBoard);
+            //     setTimeout(function() {}, AiWaitTime);
+            //     aiMovesPossible = getMoves(origBoard, AI);
+            //     c = getMoves(origBoard, HUMAN).length == 0;
+            //     scores = showScores(origBoard);
+            // }
+            console.log('\n--- Ai move end ---\n\n\n');
+
+        }
+        // mark spots the player can put pieces in
+        humanMovesPossible = getMoves(origBoard, HUMAN);
+        for (let move of humanMovesPossible) {
+            cells[move[0]][move[1]].innerHTML =
+            '<span class="redcircle"></span>'
+        }
+        checkEnd(scores);
+        computerTurn = false;
+    }
+
+
+}
 
 function analyseMove(row, col, cell) {
     // check if spot is empty
@@ -96,45 +143,17 @@ function analyseMove(row, col, cell) {
         if (validMove(row, col, origBoard, HUMAN)) {
             // console.log('row: ', row, 'col: ', col)
             removeMoveMarkers(cells);
-            makeMove(row, col, HUMAN, origBoard)
-            let scores = showScores(origBoard)
-            aiMovesPossible = getMoves(origBoard, AI)
-            if (checkEnd(scores)) {
-            } else if (aiMovesPossible.length > 0) {
-                // ai move (ai turn is after humans turn)
-                // setTimeout(function(){}, 10000)
-                aiMove = getBestMove(origBoard);
-                makeMove(aiMove[0], aiMove[1], AI, origBoard);
-                console.log('\n\n--- Ai move start ---\n')
-                console.log('\nai move:\nx: ', aiMove[0], ' y: ', aiMove[1])
-                let scores = showScores(origBoard)
-                aiMovesPossible = getMoves(origBoard, AI)
-                c = getMoves(origBoard, HUMAN).length == 0
-                while (c && aiMovesPossible.length > 0) {
-                    aiMove = getBestMove(origBoard);
-                    console.log('ai move:\nx: ', aiMove[0], ' y: ', aiMove[1])
-                    makeMove(aiMove[0], aiMove[1], AI, origBoard);
-                    let scores = showScores(origBoard)
-                    aiMovesPossible = getMoves(origBoard, AI)
-                    c = getMoves(origBoard, HUMAN).length == 0
-                }
-                console.log('\n--- Ai move end ---\n\n\n')
-
-            }
-            // mark spots the player can put pieces in
-            humanMovesPossible = getMoves(origBoard, HUMAN)
-            for (let move of humanMovesPossible) {
-                cells[move[0]][move[1]].innerHTML =
-                '<span class="redcircle"></span>'
-            }
-            checkEnd(scores)
+            makeMove(row, col, HUMAN, origBoard);
+            let scores = showScores(origBoard);
+            computerTurn = true;
+            checkEnd(scores);
 
         }
-
     }
 
-
 }
+
+
 
 function checkEnd(scores) {
     aiMovesPossible = getMoves(origBoard, AI)
@@ -143,16 +162,16 @@ function checkEnd(scores) {
     if (aiMovesPossible.length == 0 && humanMovesPossible.length == 0) {
         console.log('finished')
         stopGame()
-        let state = 'black'
+        let state = 'black';
         if (scores.white > scores.black) {
-            state = 'white'
+            state = 'white';
         } else if (scores.white == scores.black) {
-            state = 'tie'
+            state = 'tie';
         }
-        declareWinner(origBoard, state)
-        return true
+        declareWinner(origBoard, state);
+        return true;
     }
-    return false
+    return false;
 }
 
 function copyList(arr) {
@@ -160,7 +179,7 @@ function copyList(arr) {
     for (let innerArr of arr) {
         newArr.push(Array.from(innerArr));
     }
-    return newArr
+    return newArr;
 }
 
 function makeMove(row, col, player, board) {
