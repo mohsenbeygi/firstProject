@@ -111,17 +111,7 @@ function checkAiResponse() {
                 scores = showScores(origBoard);
                 return
             }
-            // while (c && aiMovesPossible.length > 0) {
-            //     aiMove = getBestMove(origBoard);
-            //     console.log('ai move:\nx: ', aiMove[0], ' y: ', aiMove[1]);
-            //     makeMove(aiMove[0], aiMove[1], AI, origBoard);
-            //     setTimeout(function() {}, AiWaitTime);
-            //     aiMovesPossible = getMoves(origBoard, AI);
-            //     c = getMoves(origBoard, HUMAN).length == 0;
-            //     scores = showScores(origBoard);
-            // }
             console.log('\n--- Ai move end ---\n\n\n');
-
         }
         // mark spots the player can put pieces in
         humanMovesPossible = getMoves(origBoard, HUMAN);
@@ -132,8 +122,6 @@ function checkAiResponse() {
         checkEnd(scores);
         computerTurn = false;
     }
-
-
 }
 
 function analyseMove(row, col, cell) {
@@ -147,12 +135,9 @@ function analyseMove(row, col, cell) {
             let scores = showScores(origBoard);
             computerTurn = true;
             checkEnd(scores);
-
         }
     }
-
 }
-
 
 
 function checkEnd(scores) {
@@ -174,13 +159,6 @@ function checkEnd(scores) {
     return false;
 }
 
-function copyList(arr) {
-    var newArr = [];
-    for (let innerArr of arr) {
-        newArr.push(Array.from(innerArr));
-    }
-    return newArr;
-}
 
 function makeMove(row, col, player, board) {
     var className;
@@ -191,8 +169,7 @@ function makeMove(row, col, player, board) {
     cells[row][col].innerHTML = '<span class="' + className + '"></span>';
     board[row][col] = player;
 
-    var x = col;
-    var y = row;
+    var x = col, y = row;
     // pieces in specific direction
     var dirPieces = [];
     var flipped = [];
@@ -217,10 +194,10 @@ function makeMove(row, col, player, board) {
                     // if before reaching opponent color, we reach own break
                     break;
                 } else dirPieces.push([y, x]);
-
             }
         }
     }
+    // turn spots captured
     for (let spot of flipped) {
         board[spot[0]][spot[1]] = player;
         cells[spot[0]][spot[1]].innerHTML =
@@ -229,6 +206,7 @@ function makeMove(row, col, player, board) {
 }
 
 function removeMoveMarkers(cells) {
+    // remove old markers showing possibles moves
     for (let row of cells) {
         for (let cell of row) {
             if (cell.innerHTML == '<span class="redcircle"></span>') {
@@ -239,6 +217,7 @@ function removeMoveMarkers(cells) {
 }
 
 function getMoves(board, player) {
+    // get possible moves
     var moves = [];
     for (let row = 0; row < TABLE_LEN; row++) {
         for (let col = 0; col < TABLE_LEN; col++) {
@@ -248,139 +227,137 @@ function getMoves(board, player) {
     return moves;
 }
 
-// function validMove(row, col, board, player) {
-//     // if empty
-//     if (board[row][col] != EMPTY) return false;
-//     // right
-//     var opponentPieces = 0;
-//     for (let x = col + 1; x < TABLE_LEN; x ++) {
-//         if (board[row][x] == EMPTY) {
-//             break;
-//         } else if (board[row][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//     }
-//     // left
-//     opponentPieces = 0;
-//     for (let x = col - 1; x >= 0; x --) {
-//         if (board[row][x] == EMPTY) {
-//             break;
-//         } else if (board[row][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//     }
-//     // down
-//     var opponentPieces = 0;
-//     for (let y = row + 1; y < TABLE_LEN; y ++) {
-//         if (board[y][col] == EMPTY) {
-//             break;
-//         } else if (board[y][col] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//     }
-//     // up
-//     var opponentPieces = 0;
-//     for (let y = row - 1; y >= 0; y --) {
-//         if (board[y][col] == EMPTY) {
-//             break;
-//         } else if (board[y][col] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//     }
-//     // right down
-//     var opponentPieces = 0;
-//     var x = col + 1;
-//     var y = row + 1;
-//     for (let move = Math.max(x, y); move < TABLE_LEN; move ++) {
-//         if (board[y][x] == EMPTY) {
-//             break;
-//         } else if (board[y][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//         x ++, y ++;
-//     }
-//     // left up
-//     var opponentPieces = 0;
-//     var x = col - 1;
-//     var y = row - 1;
-//     for (let move = Math.min(x, y); move >= 0; move --) {
-//         if (board[y][x] == EMPTY) {
-//             break;
-//         } else if (board[y][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//         x --, y --;
-//     }
-//     // right up
-//     var opponentPieces = 0;
-//     var x = col + 1;
-//     var y = row - 1;
-//     for (let move = Math.min(TABLE_LEN - x, y); move > 0; move --) {
-//         if (board[y][x] == EMPTY) {
-//             break;
-//         } else if (board[y][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//         x ++, y --;
-//     }
-//     // left down
-//     var opponentPieces = 0;
-//     var x = col - 1;
-//     var y = row + 1;
-//     // console.log('start', row, col)
-//     for (let move = Math.min(x, TABLE_LEN - y); move > 0; move --) {
-//         // console.log('move:', move, 'y: ', TABLE_LEN - y, 'x: ', x)
-//         if (board[y][x] == EMPTY) {
-//             break;
-//         } else if (board[y][x] == player) {
-//             if (opponentPieces >= 1) return true;
-//             break;
-//         } else opponentPieces ++;
-//         x --, y ++;
-//     }
-//     return false;
-// }
-
 function validMove(row, col, board, player) {
-    // check if spot is empty
-    if (board[row][col] != EMPTY) return false
-    var x = col;
-    var y = row;
+    // if empty
+    if (board[row][col] != EMPTY) return false;
+    // right
     var opponentPieces = 0;
-    // x direction ( -1, 0, 1)
-    for (var xDir = -1; xDir < 2; xDir ++) {
-        // y direction ( -1, 0, 1)
-        for (var yDir = -1; yDir < 2; yDir ++) {
-            // opponent pieces in-between players pieces
-            opponentPieces = 0;
-            // length to go on the specific direction
-            for (var len = 1; len < TABLE_LEN - 1; len ++) {
-                x = col + len * xDir, y = row + len * yDir;
-                // stop if gone out of table
-                if (x < 0 || x >= TABLE_LEN || y < 0 || y >= TABLE_LEN) break;
-                // if reach an empty break (not able to capture)
-                if (board[y][x] == EMPTY) {
-                    break;
-                } else if (board[y][x] == player) {
-                    // if reach own color check if were opponent pieces between
-                    if (opponentPieces >= 1) return true;
-                    // if before reaching opponent color, we reach own break
-                    break;
-                } else opponentPieces ++;
-
-            }
-        }
+    for (let x = col + 1; x < TABLE_LEN; x ++) {
+        if (board[row][x] == EMPTY) {
+            break;
+        } else if (board[row][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
     }
-    // if nothing was able to be captured (invalid move) return false
-    return false
+    // left
+    opponentPieces = 0;
+    for (let x = col - 1; x >= 0; x --) {
+        if (board[row][x] == EMPTY) {
+            break;
+        } else if (board[row][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+    }
+    // down
+    var opponentPieces = 0;
+    for (let y = row + 1; y < TABLE_LEN; y ++) {
+        if (board[y][col] == EMPTY) {
+            break;
+        } else if (board[y][col] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+    }
+    // up
+    var opponentPieces = 0;
+    for (let y = row - 1; y >= 0; y --) {
+        if (board[y][col] == EMPTY) {
+            break;
+        } else if (board[y][col] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+    }
+    // right down
+    var opponentPieces = 0;
+    var x = col + 1;
+    var y = row + 1;
+    for (let move = Math.max(x, y); move < TABLE_LEN; move ++) {
+        if (board[y][x] == EMPTY) {
+            break;
+        } else if (board[y][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+        x ++, y ++;
+    }
+    // left up
+    var opponentPieces = 0;
+    var x = col - 1;
+    var y = row - 1;
+    for (let move = Math.min(x, y); move >= 0; move --) {
+        if (board[y][x] == EMPTY) {
+            break;
+        } else if (board[y][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+        x --, y --;
+    }
+    // right up
+    var opponentPieces = 0;
+    var x = col + 1;
+    var y = row - 1;
+    for (let move = Math.min(TABLE_LEN - x, y); move > 0; move --) {
+        if (board[y][x] == EMPTY) {
+            break;
+        } else if (board[y][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+        x ++, y --;
+    }
+    // left down
+    var opponentPieces = 0;
+    var x = col - 1;
+    var y = row + 1;
+    // console.log('start', row, col)
+    for (let move = Math.min(x, TABLE_LEN - y); move > 0; move --) {
+        // console.log('move:', move, 'y: ', TABLE_LEN - y, 'x: ', x)
+        if (board[y][x] == EMPTY) {
+            break;
+        } else if (board[y][x] == player) {
+            if (opponentPieces >= 1) return true;
+            break;
+        } else opponentPieces ++;
+        x --, y ++;
+    }
+    return false;
 }
+
+// function validMove(row, col, board, player) {
+//     // check if spot is empty
+//     if (board[row][col] != EMPTY) return false
+//     var x = col, y = row, opponentPieces = 0;
+//     // x direction ( -1, 0, 1)
+//     for (var xDir = -1; xDir < 2; xDir ++) {
+//         // y direction ( -1, 0, 1)
+//         for (var yDir = -1; yDir < 2; yDir ++) {
+//             // opponent pieces in-between players pieces
+//             opponentPieces = 0;
+//             // length to go on the specific direction
+//             for (var len = 1; len < TABLE_LEN - 1; len ++) {
+//                 x = col + len * xDir, y = row + len * yDir;
+//                 // stop if gone out of table
+//                 if (x < 0 || x >= TABLE_LEN || y < 0 || y >= TABLE_LEN) break;
+//                 // if reach an empty break (not able to capture)
+//                 if (board[y][x] == EMPTY) {
+//                     break;
+//                 } else if (board[y][x] == player) {
+//                     // if reach own color check if were opponent pieces between
+//                     if (opponentPieces >= 1) return true;
+//                     // if before reaching opponent color, we reach own break
+//                     break;
+//                 } else opponentPieces ++;
+//
+//             }
+//         }
+//     }
+//     // if nothing was able to be captured (invalid move) return false
+//     return false
+// }
 
 function stopGame() {
     for (let row of cells) {
@@ -396,57 +373,54 @@ function declareWinner(board, state) {
     if (state == 'tie') {
         document.querySelector(".result").innerText = "Tie !";
     } else {
-        let mess = 'Winner is ' + state;
-        document.querySelector(".result").innerText = mess
+        document.querySelector(".result").innerText = 'Winner is ' + state;
     }
 }
 
 function showScores(board) {
-    var black = 0;
-    var white = 0;
+    var black = 0, white = 0;
     for (let row of board) {
         for (let cell of row) {
             if (cell == BLACK) black ++
             if (cell == WHITE) white ++
         }
     }
-    let mess = "White: " + white.toString() + "\n\nBlack: " + black.toString()
-    document.querySelector(".score").innerText = mess
-    return {black: black, white: white}
+    let mess = "White: " + white.toString() + "\n\nBlack: " + black.toString();
+    document.querySelector(".score").innerText = mess;
+    return {black: black, white: white};
 }
 
 function getBestMove(board) {
-    move = minimax(board, -Infinity, Infinity, COMPUTER_DEPTH, AI).move
-    return move
+    move = minimax(board, -Infinity, Infinity, COMPUTER_DEPTH, AI).move;
+    return move;
 
 }
 
 function evaluateBoard(board, aiMoveCount, opponentMoveCount) {
     // number of moves possible for ai and human
-    var moveCountScore = (aiMoveCount - opponentMoveCount)
+    var moveCountScore = (aiMoveCount - opponentMoveCount);
     // (aiMoveCount + opponentMoveCount);
 
     // difference between number of corners of ai and human
     var cornerScore = 0;
     for (let corner of CORNERS) {
         if (board[corner[0]][corner[1]] == AI) {
-            cornerScore += 1
-        } else if (board[corner[0]][corner[1]] == HUMAN) cornerScore -= 1
+            cornerScore += 1;
+        } else if (board[corner[0]][corner[1]] == HUMAN) cornerScore -= 1;
     }
 
     // difference between number of pieces in total
-    var aiPieceCount = 0;
-    var humanPieceCount = 0;
+    var aiPieceCount = 0, humanPieceCount = 0;
     for (let row of board) {
         for (let cell of board) {
             if (cell == AI) {
-                aiPieceCount ++
-            } else if (cell == HUMAN) humanPieceCount ++
+                aiPieceCount ++;
+            } else if (cell == HUMAN) humanPieceCount ++;
         }
     }
     // return scores with weights
-    return moveCountScore * 10 + cornerScore * 100 + (aiPieceCount - humanPieceCount) /
-    (aiPieceCount + humanPieceCount)
+    return moveCountScore * 100 + cornerScore * 10000 + (aiPieceCount - humanPieceCount) /
+    (aiPieceCount + humanPieceCount);
 }
 
 function implementMove(row, col, player, board) {
@@ -455,8 +429,7 @@ function implementMove(row, col, player, board) {
         className = 'blackcircle';
     }  else className = 'whitecircle';
 
-    var x = col;
-    var y = row;
+    var x = col, y = row;
     // pieces in specific direction
     var dirPieces = [];
     var flipped = [[row, col]];
@@ -488,8 +461,9 @@ function implementMove(row, col, player, board) {
     for (let spot of flipped) {
         board[spot[0]][spot[1]] = player;
     }
-    return flipped
+    return flipped;
 }
+
 
 function minimax(board, alpha, beta, depth, turn) {
     if (depth == 0) {
@@ -500,36 +474,25 @@ function minimax(board, alpha, beta, depth, turn) {
     if (moves.length == 0) {
         var nextPlayerMoves = getMoves(board, turn % 2 + 1);
         if (nextPlayerMoves.length == 0) {
-            // if (turn == AI) {
-            //     return {value: evaluateBoard(board,
-            //         moves.length, nextPlayerMoves.length)};
-            // }
-            // if (turn == HUMAN) {
-            //     return {value: evaluateBoard(board,
-            //         nextPlayerMoves.length, moves.length)};
-            // }
-            var aiPieceCount = 0;
-            var humanPieceCount = 0;
+            var aiPieceCount = 0, humanPieceCount = 0;
             for (let row of board) {
                 for (let cell of board) {
                     if (cell == AI) {
-                        aiPieceCount ++
-                    } else if (cell == HUMAN) humanPieceCount ++
+                        aiPieceCount ++;
+                    } else if (cell == HUMAN) humanPieceCount ++;
                 }
             }
             return (aiPieceCount - humanPieceCount) * 100
         }
     }
-    var flipped;
-    var value;
+    var flipped, value;
     if (turn == AI) {
         var result = {move: moves[0], value: -Infinity};
         for (let move of moves) {
             flipped = implementMove(move[0], move[1], turn, board);
             value = minimax(board, alpha, beta, depth - 1, turn % 2 + 1).value;
             if (result.value < value) {
-                result.value = value;
-                result.move = move;
+                result.value = value; result.move = move;
                 alpha = Math.max(alpha, value);
             }
             for (let pieceFlipped of flipped) {
@@ -546,8 +509,7 @@ function minimax(board, alpha, beta, depth, turn) {
         flipped = implementMove(move[0], move[1], turn, board);
         value = minimax(board, alpha, beta, depth - 1, turn % 2 + 1).value;
         if (result.value > value) {
-            result.value = value;
-            result.move = move;
+            result.value = value; result.move = move;
             beta = Math.min(beta, value);
         }
         for (let pieceFlipped of flipped) {
@@ -557,5 +519,4 @@ function minimax(board, alpha, beta, depth, turn) {
         if (alpha >= beta) break;
     }
     return result;
-
 }
