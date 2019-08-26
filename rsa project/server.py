@@ -9,7 +9,7 @@ import sys
 def create_socket():
     try:
         global HOST, PORT, server_socket
-        HOST = socket.gethostname()
+        HOST = '127.0.01'
         PORT = 1234
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error as msg:
@@ -32,9 +32,9 @@ def remove_client(client):
     global all_clients, keys, usernames, addrs
     # output to screen the client who disconnected
     print('\n\n **** client disconnected ! ****\n')
-    print('  # address: ', addrs[notified_socket])
-    print('  # key: ', keys[notified_socket])
-    print('  # username: ', usernames[notified_socket], '\n\n')
+    print('  # address: ', addrs[client])
+    print('  # key: ', keys[client])
+    print('  # username: ', usernames[client], '\n\n')
     # delete a clients data (we no longer need the data)
     all_clients.remove(client)
     if client in keys:
@@ -92,22 +92,38 @@ def show_clients():
 def dubugging():
     global usernames, running
     while True:
-        cmd = input()
-        if cmd == 'show':
-            show_clients()
-        elif cmd[:10] == 'disconnect':
-            user = cmd[11:]
-            print('''\nDisconnected client with username "{}" !'''.format(user))
-            # delete a clients data (we no longer need the data)
-            for client in usernames:
-                if usernames[client] == user:
+        try:
+            cmd = input()
+            if cmd == 'show':
+                show_clients()
+            elif cmd[:10] == 'disconnect':
+                user = cmd[11:]
+                msg = '''\nDisconnecting client with username "{}" ...'''
+                print(msg.format(user))
+                # delete a clients data (we no longer need the data)
+                found = False
+                for client in usernames:
+                    if usernames[client] == user:
+                        remove_client(client)
+                        found = True
+                        break
+                if not found:
+                    print('\nNo client with name: ', user, '\n')
+            elif cmd == 'shut down':
+                print('SHUTTING DOWN ...')
+                running = False
+                print('\nDisconnecting all clients ...\n')
+                sockets = [socket for socket in usernames]
+                for client in sockets:
                     remove_client(client)
-                    break
-        elif cmd == 'shut down':
-            print('SHUTTING DOWN ...')
-            running = False
-            # sys.exit()
-            quit()
+                print('\n\nDone !')
+                print('enter ctrl + c')
+                # sys.exit()
+                quit()
+            else:
+                print('Command not recognized !')
+        except Exception as msg:
+            print('Error in debugging ~ ', msg)
 
 
 # get rsa keys for cryptography
@@ -136,6 +152,15 @@ while running:
         all_clients, [], all_clients)
     # Iterate over notified sockets
     for notified_socket in active_sockets:
+        # check if client is actualy connected (for manual disconnecting)
+        available = False
+        for client in all_clients:
+            if client == notified_socket:
+                available = True
+                break
+        if not available:
+            continue
+
         # If notified socket is the server - new connection, accept it
         if notified_socket == server_socket:
             client_socket, addr = server_socket.accept()
@@ -183,5 +208,13 @@ while running:
 
     # remove clients with errors
     for notified_socket in exception_sockets:
+        # check if client is actualy connected (for manual disconnecting)
+        available = False
+        for client in all_clients:
+            if client == notified_socket:
+                available = True
+                break
+        if not available:
+            continue
         # Remove user from data
         remove_client(notified_socket)

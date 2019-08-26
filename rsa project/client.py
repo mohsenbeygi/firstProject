@@ -21,7 +21,7 @@ def encrypt(msg):
 
 def setup_client():
     global IP, PORT, client_socket, public_key, rsa
-    IP = socket.gethostname()
+    IP = '127.0.0.1'
     # socket.gethostname()
     PORT = 1234
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
